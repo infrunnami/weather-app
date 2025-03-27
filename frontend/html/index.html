@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>SkyCheck</title>
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">
+            <img src="../img/LogoDia.png" alt="SkyCheck">
+            <h1>SkyCheck</h1>
+        </div>
+        <div class="cont-ciudades">
+            <div class="buscador">
+                <input type="text" id="search" placeholder="Ingresa una ciudad">
+                <button onclick="getWeather()">Buscar</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="cuerpo">
+        <section class="container-clima">
+            <article class="hoy">
+                <h2 id="ubicacion"></h2>
+                <h1 id="temperatura"></h1>
+                <h2 id="clima"></h2>
+                <h3 id="detalles"></h3>
+                <h3 id="sensacion"></h3>
+            </article>
+            <section class="datos">
+                <div id="uv" class="dato"></div>
+                <div id="humedad" class="dato"></div>
+                <div id="viento" class="dato"></div>
+                <div id="visibilidad" class="dato"></div>
+                <div id="sunrise" class="dato"></div>
+                <div id="sunset" class="dato"></div>
+            </section>
+        </section>
+
+        <aside class="pronostico-dia">
+            <div id="botonesDias" class="dias">
+
+            </div>
+            <div class="pronostico">
+                <h2 id="horasDia"></h2>
+                <canvas id="graficoTemperatura" width="400" height="200"></canvas>
+            </div>
+        </aside>
+        <div id="map"></div>
+    </main>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="../js/script.js"></script>
+</body>
+</html>

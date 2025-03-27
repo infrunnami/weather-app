@@ -1,0 +1,14 @@
+# Ignorar archivos de entorno
+backend/.env
+
+# Ignorar dependencias
+backend/node_modules/
+frontend/node_modules/  # (si existe)
+
+# Archivos del sistema
+.DS_Store
+*.log
+
+# Editor/IDE
+.vscode/
+.idea/

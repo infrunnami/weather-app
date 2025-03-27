@@ -1,0 +1,248 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #69AABF;
+    color: #333;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+/* Header */
+.header {
+    width: 100%;
+    padding-top: 20px;
+    padding-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #102D40;
+    color: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.logo img {
+    width: 70px;
+    height: auto;
+}
+
+.logo h1 {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+/* Buscador */
+.cont-ciudades {
+    width: 90%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.buscador {
+    display: flex;
+    width: 100%;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.buscador input {
+    flex-grow: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px 0 0 8px;
+    outline: none;
+}
+
+.buscador button {
+    padding: 12px;
+    border: none;
+    background: #FFAD2C;
+    color: white;
+    border-radius: 0 8px 8px 0;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.buscador button:hover {
+    background: #ca4612;
+}
+
+/* -------------------------------------- CLIMA  -------------------------------------- */
+.cuerpo {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 1200px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.container-clima {
+    flex: 1;
+    min-width: 300px;
+    margin: 10px;
+    padding: 15px;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.datos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.dato {
+    padding: 10px;
+    background: #e9f5ff;
+    text-align: center;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* -------------------------------------- PRONOSTICO  -------------------------------------- */
+.pronostico-dia {
+    flex: 1;
+    min-width: 300px;
+    margin: 10px;
+    padding: 15px;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dias {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.dias button {
+    margin: 5px;
+    padding: 10px;
+    border: none;
+    background: #102D40;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.dias button:hover {
+    background: #276e8f;
+}
+
+#map {
+    height: 300px; 
+    width: 100%;
+    margin-top: 20px; 
+    flex: 1;
+    min-width: 600px;
+    margin: 10px;
+    padding: 15px;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    body {
+        font-size: 5vw;
+    }
+
+    .header {
+        padding: 15px;
+    }
+
+    .logo img {
+        width: 60px;
+    }
+
+    .logo h1 {
+        font-size: 2.5rem;
+    }
+
+    .buscador input, .buscador button {
+        padding: 10px;
+    }
+
+    .container-clima, .pronostico-dia {
+        width: 100%;
+        padding: 12px;
+    }
+
+    .dias button {
+        font-size: 1rem;
+        padding: 8px;
+        margin: 10px;
+    }
+
+    #map {
+        height: 250px;
+    }
+}
+
+/* Responsivo para móviles más pequeños */
+@media (max-width: 480px) {
+    body {
+        font-size: 4vw;
+    }
+
+    .header {
+        padding: 20px;
+    }
+
+    .logo img {
+        width: 50px;
+    }
+
+    .logo h1 {
+        font-size: 2rem;
+    }
+
+    .buscador input, .buscador button {
+        padding: 10px;
+        font-size: 1rem;
+    }
+
+    .container-clima, .pronostico-dia {
+        width: 100%;
+        padding: 12px;
+    }
+
+    .dias button {
+        font-size: 0.9rem;
+        padding: 8px;
+        margin: 10px;
+    }
+
+    .contenedor-pronostico {
+        flex-direction: column; /* Cambia la dirección del contenedor a columna en pantallas pequeñas */
+    }
+    #map {
+        height: 250px; /* Ajusta la altura para pantallas pequeñas */
+        width: 100%;
+        max-width: 200px; /* El mapa ocupa todo el ancho disponible */
+    }
+}

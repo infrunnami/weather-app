@@ -1,0 +1,9 @@
+# Variables de entorno
+.env
+
+# Dependencias
+node_modules/
+
+# Logs y archivos temporales
+npm-debug.log*
+*.tmp
