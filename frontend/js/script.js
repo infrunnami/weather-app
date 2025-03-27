@@ -1,34 +1,54 @@
 const API_BASE_URL = window.location.origin;
 
 document.addEventListener("DOMContentLoaded", () => {
-    obtenerUbicacionIP();
+    initUbicacion();
 });
 
-
-async function obtenerUbicacionIP() {
+async function initUbicacion() {
+    // 1. Primero intentamos con la API de IP (sin requerir permisos)
     try {
-        const ipUrl = "http://ip-api.com/json"; // API de ubicación
-        const response = await fetch(ipUrl);
+        const response = await fetch('https://ipapi.co/json/');
         const data = await response.json();
-        console.log("Datos de ip-api:", data);
-
-        if (data.status === "fail") {
-            throw new Error("No se pudo obtener la ubicación de la IP.");
-        }
-
-        const { lat, lon, city } = data;
-        if (lat && lon) {
-            const latRedondeada = parseFloat(lat).toFixed(4); // -33.4521
-            const lonRedondeada = parseFloat(lon).toFixed(4);
-            getWeatherCoords(latRedondeada, lonRedondeada);
-            mostrarMapa(lat, lon);
-        } else if (city) {
-            getWeather(city); 
+        
+        if (data.latitude && data.longitude) {
+            getWeatherCoords(data.latitude, data.longitude);
+            mostrarMapa(data.latitude, data.longitude);
+            return;
         }
     } catch (error) {
-        console.error("Error al obtener la ubicación de la IP:", error);
-        alert("No se pudo determinar la ubicación automáticamente. Por favor, ingresa una ciudad.");
+        console.log("Error con ipapi.co:", error);
     }
+
+    // 2. Si falla, pedimos geolocalización al navegador
+    if (navigator.geolocation) {
+        document.getElementById("ubicacion").textContent = "Permite el acceso a tu ubicación para mejores resultados...";
+        
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                getWeatherCoords(pos.coords.latitude, pos.coords.longitude);
+                mostrarMapa(pos.coords.latitude, pos.coords.longitude);
+            },
+            (err) => {
+                console.log("Error de geolocalización:", err);
+                showSearchPrompt();
+            }
+        );
+    } else {
+        showSearchPrompt();
+    }
+}
+
+function showSearchPrompt() {
+    document.getElementById("ubicacion").textContent = "Ingresa una ciudad para ver el clima:";
+    document.getElementById("search").placeholder = "Ej: Santiago, Buenos Aires...";
+    document.getElementById("search").focus();
+    
+    // Configura el event listener para el buscador
+    document.getElementById("search").addEventListener("change", (e) => {
+        if (e.target.value.trim()) {
+            getWeather(e.target.value);
+        }
+    });
 }
 
 
@@ -41,9 +61,16 @@ function success(position) {
 
 function error() {
     const buscador = document.getElementById("search");
-
+    const ubicacionElement = document.getElementById("ubicacion");
+    
+    ubicacionElement.textContent = "Ingresa una ciudad para ver el clima";
+    buscador.placeholder = "Ej: Santiago, Buenos Aires...";
+    buscador.focus();
+    
     buscador.addEventListener("change", (event) => {
-        getWeather(event.target.value);
+        if (event.target.value.trim()) {
+            getWeather(event.target.value);
+        }
     });
 }
 
