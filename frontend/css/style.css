@@ -1,4 +1,9 @@
 /* Estilos generales */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -87,13 +92,12 @@ h1 {
 
 /* -------------------------------------- CLIMA  -------------------------------------- */
 .cuerpo {
-    display: flex;
-    flex-wrap: wrap;
     width: 100%;
     max-width: 1200px;
-    justify-content: center;
-    margin-top: 20px;
-}
+    margin: 20px auto;
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
 
 .container-clima {
     flex: 1;
@@ -153,96 +157,107 @@ h1 {
 }
 
 #map {
-    height: 300px; 
+    height: 250px;
     width: 100%;
-    margin-top: 20px; 
-    flex: 1;
-    min-width: 600px;
-    margin: 10px;
-    padding: 15px;
+    margin: 10px 0;
+    padding: 10px;
     border-radius: 8px;
     background: white;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-}
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    order: 3; /* Fuerza posición inferior */
+  }
 
-/* Responsivo */
-@media (max-width: 768px) {
+  @media (max-width: 768px) {
+    /* A. Ajustes generales */
     body {
-        font-size: 5vw;
+      font-size: 16px; /* Texto legible */
     }
 
+    html, body {
+        position: relative;
+        width: 100%;
+        overflow-x: hidden;
+        touch-action: pan-y; /* Permite solo desplazamiento vertical */
+    }
+    
+    .cuerpo, .header, .cont-ciudades, .container-clima, .pronostico-dia {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+    /* B. Header compacto */
     .header {
-        padding: 15px;
+      padding: 15px 10px;
     }
-
     .logo img {
-        width: 60px;
+      width: 50px;
     }
-
     .logo h1 {
-        font-size: 2.5rem;
+      font-size: 1.8rem;
     }
-
-    .buscador input, .buscador button {
-        padding: 10px;
-    }
-
-    .container-clima, .pronostico-dia {
-        width: 100%;
-        padding: 12px;
-    }
-
-    .dias button {
-        font-size: 1rem;
-        padding: 8px;
-        margin: 10px;
-    }
-
+    
+    /* C. Contenedores (clima, pronóstico, mapa) */
+    .container-clima,
+    .pronostico-dia,
     #map {
-        height: 250px;
+      width: 95%;
+      max-width: 400px; /* Ancho máximo controlado */
+      margin: 10px auto;
+      padding: 12px;
     }
-}
-
-/* Responsivo para móviles más pequeños */
-@media (max-width: 480px) {
-    body {
-        font-size: 4vw;
+    
+    /* D. Botones del pronóstico */
+    .dias button {
+      font-size: 14px;
+      padding: 8px 12px;
+      margin: 4px;
     }
-
+    
+    /* E. Override para Leaflet (evita zoom horizontal) */
+    .leaflet-container {
+      touch-action: pan-y !important;
+    }
+  }
+  
+  /* --------------------------------------------
+     TABLETS (Horizontal - 769px a 1024px)
+     -------------------------------------------- */
+  @media (min-width: 769px) and (max-width: 1024px) {
+    /* A. Diseño en 2 columnas */
+    .cuerpo {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+    .container-clima,
+    .pronostico-dia {
+      flex: 1;
+      min-width: 45%; /* Espacio equilibrado */
+      margin: 10px;
+    }
+    
+    /* B. Mapa ocupa ancho completo */
+    #map {
+      width: calc(100% - 20px);
+      margin: 10px;
+    }
+  }
+  
+  /* --------------------------------------------
+     ESCRITORIO (>1025px)
+     -------------------------------------------- */
+  @media (min-width: 1025px) {
+    /* A. Diseño en 2 filas: Clima + Pronóstico → Mapa */
+    .cuerpo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    #map {
+      grid-column: span 2; /* Ocupa ambas columnas */
+    }
+    
+    /* B. Header más espaciado */
     .header {
-        padding: 20px;
+      padding: 25px 0;
     }
-
-    .logo img {
-        width: 50px;
-    }
-
-    .logo h1 {
-        font-size: 2rem;
-    }
-
-    .buscador input, .buscador button {
-        padding: 10px;
-        font-size: 1rem;
-    }
-
-    .container-clima, .pronostico-dia {
-        width: 100%;
-        padding: 12px;
-    }
-
-    .dias button {
-        font-size: 0.9rem;
-        padding: 8px;
-        margin: 10px;
-    }
-
-    .contenedor-pronostico {
-        flex-direction: column; /* Cambia la dirección del contenedor a columna en pantallas pequeñas */
-    }
-    #map {
-        height: 250px; /* Ajusta la altura para pantallas pequeñas */
-        width: 100%;
-        max-width: 200px; /* El mapa ocupa todo el ancho disponible */
-    }
-}
+  }

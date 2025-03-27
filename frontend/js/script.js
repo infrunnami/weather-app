@@ -84,17 +84,18 @@ async function getWeatherCoords(lat, lon) {
 }
 
 function getWeather() {
-    const city = document.getElementById('search').value;
+    const cityInput = document.getElementById('search');
+    const city = cityInput.value.trim();
     if (!city) {
         alert("Por favor ingresa una ciudad.");
         return;
     }
-    fetchWeather(city); // Envía como string
+    fetchWeather(city); 
+    cityInput.value = '';
 }
 
 async function fetchWeather(locationData) {
     try {
-        // Construye la URL según el tipo de datos
         let url;
         if (typeof locationData === 'object' && locationData.lat && locationData.lon) {
             url = `${API_BASE_URL}/api/weather?lat=${locationData.lat}&lon=${locationData.lon}`;
@@ -104,59 +105,27 @@ async function fetchWeather(locationData) {
             throw new Error('Datos de ubicación no válidos');
         }
 
-        console.log('Consultando API en:', url); // Log para depuración
-        
         const response = await fetch(url);
         
-        // Verifica si la respuesta es exitosa
         if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Error en la respuesta:', {
-                status: response.status,
-                statusText: response.statusText,
-                errorText
-            });
-            throw new Error(`Error ${response.status}: ${response.statusText || 'No se pudo obtener el clima'}`);
-        }
-
-        // Verifica que la respuesta sea JSON
-        const contentType = response.headers.get('content-type');
-        if (!contentType?.includes('application/json')) {
-            const textData = await response.text();
-            console.error('Respuesta no JSON recibida:', textData.substring(0, 100));
-            throw new Error('La API devolvió un formato inesperado');
+            throw new Error('No se pudieron obtener los datos de la ciudad');
         }
 
         const data = await response.json();
         
-        // Validación básica de la estructura de datos
         if (!data?.location || !data?.current) {
-            console.error('Datos incompletos recibidos:', data);
             throw new Error('Datos meteorológicos incompletos');
         }
 
-        // Procesa los datos
         mostrarResultado(data);
         actualizarBotones(data.forecast.forecastday);
         
-        return data; // Opcional: devuelve los datos para uso futuro
+        return data;
         
     } catch (error) {
-        console.error('Error en fetchWeather:', {
-            error: error.message,
-            locationData,
-            stack: error.stack
-        });
-        
-        // Muestra un mensaje más amigable al usuario
-        alert(`Error al obtener datos del clima: ${error.message || 'Por favor intenta nuevamente'}`);
-        
-        // Opcional: recarga la página si es un error grave
-        if (error.message.includes('formato inesperado')) {
-            setTimeout(() => location.reload(), 3000);
-        }
-        
-        throw error; // Re-lanza el error para manejo posterior
+        console.error('Error:', error);
+        alert(error.message);
+        throw error;
     }
 }
 
