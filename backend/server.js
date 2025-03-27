@@ -2,6 +2,7 @@ const express = require('express');
 const fetch = require('node-fetch');
 const dotenv = require('dotenv');
 const path = require('path');
+const cors = require('cors');
 
 dotenv.config();
 
@@ -13,6 +14,10 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(cors({
+    origin: '*' // O especifica tu dominio en Render
+  }));
+
 // Health Check (para Render)
 app.get('/api/healthcheck', (req, res) => {
   res.status(200).send('OK');
@@ -22,7 +27,7 @@ app.get('/api/healthcheck', (req, res) => {
 app.use('/css', express.static(path.join(__dirname, '../frontend/css')));
 app.use('/js', express.static(path.join(__dirname, '../frontend/js')));
 app.use('/img', express.static(path.join(__dirname, '../frontend/img')));
-app.use(express.static(path.join(__dirname, '../frontend/html'))); // HTML principal
+app.use(express.static(path.join(__dirname, '../frontend/html')));
 
 // API Endpoints (deben ir ANTES del catch-all)
 app.get('/api/weather', async (req, res) => {  // Cambiado a /api/weather

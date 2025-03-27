@@ -1,3 +1,5 @@
+const API_BASE_URL = window.location.origin;
+
 document.addEventListener("DOMContentLoaded", () => {
     obtenerUbicacionIP();
 });
@@ -65,24 +67,69 @@ function getWeather() {
 
 async function fetchWeather(locationData) {
     try {
+        // Construye la URL según el tipo de datos
         let url;
         if (typeof locationData === 'object' && locationData.lat && locationData.lon) {
-            // Si es un objeto con lat/lon (coordenadas)
-            url = `/weather?lat=${locationData.lat}&lon=${locationData.lon}`;
+            url = `${API_BASE_URL}/api/weather?lat=${locationData.lat}&lon=${locationData.lon}`;
+        } else if (typeof locationData === 'string') {
+            url = `${API_BASE_URL}/api/weather?city=${encodeURIComponent(locationData)}`;
         } else {
-            // Si es un string (nombre de ciudad)
-            url = `/weather?city=${encodeURIComponent(locationData)}`;
+            throw new Error('Datos de ubicación no válidos');
         }
 
-        const response = await fetch(url);
-        if (!response.ok) throw new Error("No se pudo obtener el clima");
+        console.log('Consultando API en:', url); // Log para depuración
         
+        const response = await fetch(url);
+        
+        // Verifica si la respuesta es exitosa
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Error en la respuesta:', {
+                status: response.status,
+                statusText: response.statusText,
+                errorText
+            });
+            throw new Error(`Error ${response.status}: ${response.statusText || 'No se pudo obtener el clima'}`);
+        }
+
+        // Verifica que la respuesta sea JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType?.includes('application/json')) {
+            const textData = await response.text();
+            console.error('Respuesta no JSON recibida:', textData.substring(0, 100));
+            throw new Error('La API devolvió un formato inesperado');
+        }
+
         const data = await response.json();
+        
+        // Validación básica de la estructura de datos
+        if (!data?.location || !data?.current) {
+            console.error('Datos incompletos recibidos:', data);
+            throw new Error('Datos meteorológicos incompletos');
+        }
+
+        // Procesa los datos
         mostrarResultado(data);
         actualizarBotones(data.forecast.forecastday);
+        
+        return data; // Opcional: devuelve los datos para uso futuro
+        
     } catch (error) {
-        console.error(error);
-        alert(error.message);
+        console.error('Error en fetchWeather:', {
+            error: error.message,
+            locationData,
+            stack: error.stack
+        });
+        
+        // Muestra un mensaje más amigable al usuario
+        alert(`Error al obtener datos del clima: ${error.message || 'Por favor intenta nuevamente'}`);
+        
+        // Opcional: recarga la página si es un error grave
+        if (error.message.includes('formato inesperado')) {
+            setTimeout(() => location.reload(), 3000);
+        }
+        
+        throw error; // Re-lanza el error para manejo posterior
     }
 }
 
